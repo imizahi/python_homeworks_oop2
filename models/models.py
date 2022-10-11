@@ -33,7 +33,6 @@ class Employee(Model):
         self.name = name
         self.object_id = object_id
         self.type_of_work = type_of_work
-
     def get_work(self):
         # Витягуєм данні про роботу
         if self.type_of_work == 'plant':
@@ -48,10 +47,23 @@ class Employee(Model):
         # Викликаєм батьківський метод get_by_id (get_by_id з класу Model)
         employee_dict = super().get_by_id(id)
         employee = Employee(employee_dict['name'], int(employee_dict['object_id']), employee_dict['type_of_work'])
-        work_of_employee = employee.get_work()
+        work_of_employee_plant = Plant.get_data()
+        work_of_employee_salon = Salon.get_data()
         cls.print_object([employee_dict])
-        print('Employee work: ')
-        cls.print_object([work_of_employee])
+        print('Employee work in this: ')
+        if employee_dict['type_of_work'] == 'plant':
+            for el in work_of_employee_plant:
+                for el_2 in el:
+                    if str(el['id']) == str(employee_dict['object_id']):
+                        print(el['name'])
+                        break
+        elif employee_dict['type_of_work'] == 'salon':
+            for el in work_of_employee_salon:
+                for el_2 in el:
+                    if str(el['id']) == str(employee_dict['object_id']):
+                        print(el['name'])
+                        break
+
 
 class Salon(Model):
     file = 'salon.json'
